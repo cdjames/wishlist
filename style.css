@@ -1,0 +1,117 @@
+/*
+	** Author: Collin James, CS 340
+	** Date: 5/4/16
+	** Description: Final Project, css
+*/
+
+html {
+	font-family: "Helvetica Neue", "Gill Sans", "Helvetica", "Arial", sans-serif;
+	font-size: 1em;
+}
+
+table, tr, td, th {
+	border: solid 1px silver;
+	border-collapse: collapse;
+	padding: 2px;
+	text-align: center;
+}
+
+thead {
+	font-size: 105%;
+}
+
+thead th {
+	padding: 3px 6px 0px 6px;
+}
+
+tfoot {
+	font-size: 90%;
+}
+
+tfoot td {
+	padding: 3px 0px 0px 0px;
+}
+
+tbody td {
+	padding: 3px 6px;
+}
+
+tbody th:first-child { /* only affect first table column */
+	/*font-weight: normal;*/
+	/*font-style: italic;*/
+	/*padding: 0px 6px;*/
+}
+
+tbody tr:nth-child(odd) { /* only affect odd body table rows */
+	background-color: #EEE; /* light grey */
+}
+
+ul li {
+	list-style-type: circle;
+}
+
+div {
+	/*width: 75%;*/
+	/*text-align: center;*/
+	color: black;
+}
+
+div.flex {
+	display: flex;
+	width: 500px;
+	margin: 0px auto;
+	background: rgb(219, 219, 219) none repeat scroll 0% 0%;
+	padding: 20px;
+}
+
+div.flex:first-child{
+	margin-bottom: 30px;
+}
+div.outer-content {
+	background-color: #FFC0CB; /* pink */
+	margin-top: 20px;
+	padding: 10px;
+}
+
+input, label {
+	margin-bottom: 5px;
+	display: block;
+}
+
+/*input[placeholder] {*/  /* select only input fields with a placeholder */
+input { 
+	width: 96%;
+}
+
+form > fieldset { /* only the first fieldset child of form */
+	padding: 10px;
+}
+
+form, fieldset {
+	display: inline;
+}
+
+fieldset{
+	border: 1px dotted grey;
+}
+
+form{
+	margin-right: 20px;
+}
+
+input[type="submit"] { /* target submit buttons */
+	margin-top: 8px;
+	width: 100%;
+}
+
+p {
+	font-size: 1.5em;
+}
+
+dl:before{
+	content: "• ";
+}
+
+dd:before{
+	content: "- ";
+}
