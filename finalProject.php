@@ -11,9 +11,6 @@ $mysqli = new mysqli("oniddb.cws.oregonstate.edu","jamesc2-db","moS6V4cjzEttrXwo
 if($mysqli->connect_errno){
 	echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
 	}
-else {
-	echo "mysqli success";
-}
 
 ?>
 
@@ -37,13 +34,23 @@ else {
 						<th>Date of Birth</th>
 						<th>List</th>
 					</tr>
-					<tr>
-						<td>John</td>
-						<td>Smith</td>
-						<td>1980-03-13</td>
-						<!-- example php anchor; want to change later, make dynamic -->
-						<td><a href="list.php?id=1">Mylist</a></td>
-					</tr>
+					<!-- dynamically add from database -->
+<?php
+if(!($stmt = $mysqli->prepare("SELECT u.fname, u.lname, u.dob, l.list_id FROM users u INNER JOIN list l ON l.fk_user_id = u.user_id GROUP BY u.lname" ))){
+	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
+}
+
+if(!$stmt->execute()){
+	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+}
+if(!$stmt->bind_result($fname, $lname, $dob, $listid)){
+	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+}
+while($stmt->fetch()){
+ echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $dob . "\n</td>\n<td><a href=\"list.php?id=" . $listid . "\">Mylist</a></td>\n</tr>";
+}
+$stmt->close();
+?>
 				</table>
 			</div>
 
@@ -72,7 +79,12 @@ else {
 
 		<div class="outer">
 			<div>
-				<h1>User's List</h1>
+				<h1>
+					<?php 
+					echo "$fname ";
+					?> 
+					's List
+				</h1>
 				<table id="lists">
 					<tr>
 						<th>Date Created</th>
@@ -83,6 +95,9 @@ else {
   						<td>1980-03-13</td>
 						<!-- example php anchor; want to change later, make dynamic -->
 					</tr>
+<?php 
+echo $listid;
+?>
 				</table>
 				<div>
 					<div>
@@ -125,6 +140,10 @@ else {
 			        <input type="submit" id="pr_update" value="Update Product">
 			      </fieldset>
 			    </form>
+		    </div>
+		</div>
+	</body>
+</html>	    </form>
 		    </div>
 		</div>
 	</body>
