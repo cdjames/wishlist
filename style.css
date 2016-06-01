@@ -9,6 +9,10 @@ html {
 	font-size: 1em;
 }
 
+h1 {
+	margin: 0px;
+}
+
 table, tr, td, th {
 	border: solid 1px silver;
 	border-collapse: collapse;
@@ -115,3 +119,29 @@ dl:before{
 dd:before{
 	content: "- ";
 }
+
+div.outer {
+	float: left;
+}
+
+div.outer:nth-child(even){
+	margin: 0px 25px;
+}
+
+div#price_outer {
+	display: flex;
+}
+
+div#price_outer span {
+	margin: 0px 3px;
+	font-size: 145%;
+}
+input#price{
+	width: 110px;
+	text-align: right;
+}
+
+input#price_cents{
+	width: 30px;
+}
+

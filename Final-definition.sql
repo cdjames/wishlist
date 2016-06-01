@@ -89,7 +89,6 @@ CREATE TABLE IF NOT EXISTS mfct_product (
 
 CREATE TABLE IF NOT EXISTS stores (
 	store_id INT NOT NULL AUTO_INCREMENT,
-	store_url VARCHAR(255),
 	store_name VARCHAR(255) NOT NULL,
 	PRIMARY KEY (store_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -98,6 +97,7 @@ CREATE TABLE IF NOT EXISTS product_store (
 	fk_product_id INT NOT NULL,
 	fk_store_id INT,
 	price DECIMAL(7,2),
+	product_url VARCHAR(255),
 	PRIMARY KEY (fk_product_id, fk_store_id),
 	CONSTRAINT fk_product_id_3 FOREIGN KEY (fk_product_id) 
 		REFERENCES product (product_id),
