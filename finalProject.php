@@ -46,8 +46,16 @@ if(!$stmt->execute()){
 if(!$stmt->bind_result($fname, $lname, $dob, $listid)){
 	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 }
+$cnt = 0;
+$saved_list_id;
+$saved_fname;
 while($stmt->fetch()){
+ if ($cnt == 0) {
+ 	$saved_list_id = $listid;
+ 	$saved_fname = $fname;
+ }
  echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $dob . "\n</td>\n<td><a href=\"list.php?id=" . $listid . "\">Mylist</a></td>\n</tr>";
+ $cnt++;
 }
 $stmt->close();
 ?>
@@ -81,32 +89,77 @@ $stmt->close();
 			<div>
 				<h1>
 					<?php 
-					echo "$fname ";
-					?> 
-					's List
+					echo "$saved_fname";
+					?>'s List
 				</h1>
 				<table id="lists">
 					<tr>
 						<th>Date Created</th>
 						<th>Date Updated</th>
 					</tr>
-					<tr>
-  						<td>1980-03-13</td>
-  						<td>1980-03-13</td>
-						<!-- example php anchor; want to change later, make dynamic -->
-					</tr>
+<!-- dynamically add first user's list -->
 <?php 
-echo $listid;
+	if(!($stmt = $mysqli->prepare("SELECT DATE_FORMAT(l.created, '%M %D, %Y'), DATE_FORMAT(l.updated, '%M %D, %Y') FROM list l WHERE l.list_id = ?" ))){
+		echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
+	}
+
+	if(!($stmt->bind_param("i", $saved_list_id))){
+		echo "Bind failed: "  . $stmt->errno . " " . $stmt->error;
+	}
+
+	if(!$stmt->execute()){
+		echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+	}
+	if(!$stmt->bind_result($created, $updated)){
+		echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+	}
+	while($stmt->fetch()){
+	 echo "<tr>\n<td>\n" . $created . "\n</td>\n<td>\n" . $updated . "\n</td>";
+	}
+	$stmt->close();
 ?>
 				</table>
 				<div>
 					<div>
-						<h1>iPod</h1>
-						<h2>Made by <span>Apple</span></h2>
-						<img src="">
-						<ul>
-							<li>Buy at <a href="#">Amazon</a> for <span>299.99</span></li>
-						</ul>
+<?php 
+	if(!($stmt = $mysqli->prepare("SELECT p.name, p.photo_url, lp.bought, ps.price, m.name, m.country, s.store_name, ps.product_url FROM users u 
+		INNER JOIN list l ON l.fk_user_id = u.user_id
+		INNER JOIN list_product lp ON lp.fk_list_id = l.list_id
+		INNER JOIN product p ON p.product_id = lp.fk_product_id
+		INNER JOIN product_store ps ON ps.fk_product_id = p.product_id
+		INNER JOIN stores s ON s.store_id = ps.fk_store_id
+		INNER JOIN mfct_product mp ON p.product_id = mp.fk_product_id
+		INNER JOIN manufacturer m ON m.mfct_id = mp.fk_mfct_id
+		WHERE u.user_id = ?" ))){
+		echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
+	}
+
+	if(!($stmt->bind_param("i", $saved_list_id))){
+		echo "Bind failed: "  . $stmt->errno . " " . $stmt->error;
+	}
+
+	if(!$stmt->execute()){
+		echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+	}
+	if(!$stmt->bind_result($pname, $photourl, $bought, $price, $mname, $country, $sname, $produrl)){
+		echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+	}
+	while($stmt->fetch()){
+	 $productinfo = "<h1>$pname</h1>
+				<h2>Made by <span>$mname</span></h2>
+				<img src=\"$photourl\" width=\"100\" height=\"100\">
+				<ul>";
+		if ($bought) {
+			$productinfo = $productinfo . "You own this!";
+		} else {
+			$productinfo = $productinfo . "<li>Buy at <a href=\"$produrl\">$sname</a> for <span>$price</span></li>";
+		}
+		$productinfo = $productinfo . "</ul>";
+		echo $productinfo;
+	}
+
+	$stmt->close();
+?>
 					</div>
 				</div>
 			</div>
@@ -143,8 +196,4 @@ echo $listid;
 		    </div>
 		</div>
 	</body>
-</html>	    </form>
-		    </div>
-		</div>
-	</body>
-</html>
+</html>	   
