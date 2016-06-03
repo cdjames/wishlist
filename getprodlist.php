@@ -29,7 +29,7 @@ while($stmt->fetch()){
 $html = "<h1>".		 
 			$newfname . " " . $newlname . "'s List
 		</h1>
-		<table id='lists'>
+		<table id='lists' data-id='$listid'>
 			<tr>
 				<th>Date Created</th>
 				<th>Date Updated</th>
@@ -58,7 +58,7 @@ $html = "<h1>".
 	
 	$html = $html .	"</table><div>";
  
-	if(!($stmt = $mysqli->prepare("SELECT p.name, p.photo_url, lp.bought, ps.price, m.name, m.country, s.store_name, ps.product_url FROM users u INNER JOIN list l ON l.fk_user_id = u.user_id INNER JOIN list_product lp ON lp.fk_list_id = l.list_id INNER JOIN product p ON p.product_id = lp.fk_product_id INNER JOIN product_store ps ON ps.fk_product_id = p.product_id INNER JOIN stores s ON s.store_id = ps.fk_store_id INNER JOIN mfct_product mp ON p.product_id = mp.fk_product_id INNER JOIN manufacturer m ON m.mfct_id = mp.fk_mfct_id WHERE u.user_id = (SELECT fk_user_id FROM list WHERE list_id = ?)" ))){
+	if(!($stmt = $mysqli->prepare("SELECT p.name, p.photo_url, lp.bought, ps.price, m.name, m.country, s.store_name, ps.product_url, p.product_id, m.mfct_id, s.store_id FROM users u LEFT JOIN list l ON l.fk_user_id = u.user_id LEFT JOIN list_product lp ON lp.fk_list_id = l.list_id LEFT JOIN product p ON p.product_id = lp.fk_product_id LEFT JOIN product_store ps ON ps.fk_product_id = p.product_id LEFT JOIN stores s ON s.store_id = ps.fk_store_id LEFT JOIN mfct_product mp ON p.product_id = mp.fk_product_id LEFT JOIN manufacturer m ON m.mfct_id = mp.fk_mfct_id WHERE l.list_id = ?" ))){
 		echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 	}
 
@@ -69,21 +69,27 @@ $html = "<h1>".
 	if(!$stmt->execute()){
 		echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 	}
-	if(!$stmt->bind_result($pname, $photourl, $bought, $price, $mname, $country, $sname, $produrl)){
+	if(!$stmt->bind_result($pname, $photourl, $bought, $price, $mname, $country, $sname, $produrl, $product_id, $mfct_id, $store_id)){
 		echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 	}
 	while($stmt->fetch()){
-	 $productinfo = "<div class=\"product\"><h1>$pname</h1>
-				<h2>Made by <span>$mname</span></h2>
-				<img src=\"$photourl\" width=\"100\" height=\"100\">
-				<ul>";
-		if ($bought) {
-			$productinfo = $productinfo . "You own this!";
+		$productinfo = "<div class=\"product\" data-pid='$product_id' data-mid='$mfct_id' data-sid='$store_id'><h1>$pname</h1>";
+	 	$productinfo .= ($mname) ? "<h2>Made by <span>$mname</span></h2>" : "";
+		// check that url is actually a url
+		$productinfo .=  (strpos($photourl, "http") !== false) ? "<img src=\"$photourl\" width=\"100\" height=\"100\">" : "";
+		$productinfo .= "<ul>";
+		if($bought){
+			$productinfo .= "<li>You own this!</li>"; 
 		} else {
-			$productinfo = $productinfo . "<li>Buy at <a href=\"$produrl\">$sname</a> for <span>$price</span></li>";
+			if($sname){
+				$productinfo .= "<li>Buy at ";
+				$productinfo .= ($produrl) ? "<a href=\"$produrl\">$sname</a>" : $sname;
+				$productinfo .= ($price) ? " for <span>$price</span></li>" : "</li>";
+			}
+			
 		}
-		$productinfo = $productinfo . "</ul></div>";
-		$html = $html . $productinfo;
+		$productinfo .= "</ul><button class='prod_update'>Edit Product</button></div>";
+		$html .= $productinfo;
 	}
 
 	$stmt->close();

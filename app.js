@@ -8,8 +8,39 @@ var YEARS = 100,
 	OLDEST_USER = 36,
 	MONTHS = {January: 31, February: 29, March: 31, April: 30, May: 31, June: 30, July: 31, August: 31, September: 30, October: 31, November: 30, December: 31};
 
-var functions = [configForm, handleAddUser, handleListClick];
+var functions = [configForm, handleAddUser, handleListClick, handleAddProduct, bindProductEdit];
 doOnLoad(functions);
+
+function bindProductEdit(){
+	var buttons = document.getElementsByClassName('prod_update');
+	for (var i = 0; i < buttons.length; i++) {
+		buttons[i].addEventListener('click', function (event) {
+			var parent = event.target.parentElement,
+				pid = parent.getAttribute('data-pid'),
+				mid = parent.getAttribute('data-mid'),
+				sid = parent.getAttribute('data-sid');
+			document.getElementById('add_prod_form_pid').value = pid;
+			document.getElementById('add_prod_form_mid').value = mid;
+			document.getElementById('add_prod_form_sid').value = sid;
+		})
+	};
+}
+
+function handleAddProduct () {
+	var addProdForm = document.getElementById('addproduct');
+	addProdForm.addEventListener('submit', function (event) {
+		event.preventDefault();
+		var formData = new FormData(addProdForm);
+		formData.append("listid", document.getElementById('lists').getAttribute('data-id'));
+		var request = new XMLHttpRequest();
+		request.open("POST", "addproduct.php", true);
+		request.addEventListener('load', function () {
+			console.log(request.responseText);
+			// getProductList(document.getElementById('lists').getAttribute('data-id'));		
+		});
+		request.send(formData);
+	});
+}
 
 function handleListClick () {
 	var buttons = document.getElementsByClassName('list_button');

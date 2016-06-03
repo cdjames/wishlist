@@ -70,17 +70,22 @@ if($mysqli->connect_errno){
 			<div>
 				<form id="addproduct" method="post"> <!-- UPDATE THIS -->
 			      <fieldset>
+			      	<input type="hidden" name="pid" id="add_prod_form_pid">
 			        <legend>Add/Update Product</legend>
 			        <label for="name">Name</label>
 			        <input type="text" name="name" id="pr_name">
 			        <label for="url">Photo URL</label>
 			        <input type="text" name="url" id="url">
+			        <input type="hidden" name="mid" id="add_prod_form_mid">
 			        <label for="mfct">Manufacturer</label>
 			        <input type="text" name="mfct" id="mfct">
+			        <label for="mfct_cty">Manufacturer Country</label>
+			        <input type="text" name="mfct_cty" id="mfct_cty">
 			        <label for="price">Price</label>
 			        <div id="price_outer">
 				        <input type="number" value="10" name="price" id="price" min="0"><span> . </span> 
 				        <input type="number" value="99" name="price_cents" id="price_cents" min="0" max="99"></div>
+				    <input type="hidden" name="sid" id="add_prod_form_sid">
 			        <label for="store">Store Name</label>
 			        <input type="text" name="store" id="store">
 			        <label for="prod_url">Product Url</label>
