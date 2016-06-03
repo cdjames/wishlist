@@ -28,56 +28,60 @@ if($mysqli->connect_errno){
 			<div>
 				<h1>User</h1>
 				<table id="users">
-					<tr>
+					<tbody>
+					<!-- <tr>
 						<th>First name</th>
 						<th>Last name</th>
 						<th>Date of Birth</th>
 						<th>List</th>
-					</tr>
+					</tr> -->
 					<!-- dynamically add from database -->
 <?php
-if(!($stmt = $mysqli->prepare("SELECT u.fname, u.lname, u.dob, l.list_id FROM users u INNER JOIN list l ON l.fk_user_id = u.user_id GROUP BY u.lname" ))){
-	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
-}
+	include 'getuserlist.php';
+// if(!($stmt = $mysqli->prepare("SELECT u.fname, u.lname, u.dob, l.list_id FROM users u INNER JOIN list l ON l.fk_user_id = u.user_id GROUP BY u.lname, u.fname" ))){
+// 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
+// }
 
-if(!$stmt->execute()){
-	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-if(!$stmt->bind_result($fname, $lname, $dob, $listid)){
-	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-$cnt = 0;
-$saved_list_id;
-$saved_fname;
-while($stmt->fetch()){
- if ($cnt == 0) {
- 	$saved_list_id = $listid;
- 	$saved_fname = $fname;
- }
- echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $dob . "\n</td>\n<td><a href=\"list.php?id=" . $listid . "\">Mylist</a></td>\n</tr>";
- $cnt++;
-}
-$stmt->close();
+// if(!$stmt->execute()){
+// 	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+// }
+// if(!$stmt->bind_result($fname, $lname, $dob, $listid)){
+// 	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+// }
+// $cnt = 0;
+// $saved_list_id;
+// $saved_fname;
+// while($stmt->fetch()){
+//  if ($cnt == 0) {
+//  	$saved_list_id = $listid;
+//  	$saved_fname = $fname;
+//  }
+//  echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $dob . "\n</td>\n<td><a href=\"list.php?id=" . $listid . "\">Mylist</a></td>\n</tr>";
+//  $cnt++;
+// }
+// $stmt->close();
 ?>
+					</tbody>
 				</table>
 			</div>
 
 			<div>
-				<form id="adduser" method="post"> <!-- UPDATE THIS -->
+				<form id="adduser" name="adduser" method="post"> <!-- UPDATE THIS -->
 			      <fieldset>
 			        <legend>Add/Update User</legend>
-			        <label for="name">Name</label>
-			        <input type="text" name="name" id="name">
-			        <label for="listname">List Name</label>
-			        <input type="text" name="listname" id="listname">
-			         <label for="DOB">Date of birth</label>
+			        <label for="fname">Name</label>
+			        <input type="text" name="fname" id="fname">
+			        <label for="lname">List Name</label>
+			        <input type="text" name="lname" id="lname">
+			         <label for="DOByears">Date of birth</label>
 			        <!-- <input type="text" name="DOB" id="DOB"> -->
-			        <select id="DOByears">
+			        <select id="DOByears" form="adduser">
 			        </select>
-			        <select id="DOBmonths">
+			        <select id="DOBmonths" form="adduser">
 			        </select>
-			        <select id="DOBdays">
+			        <select id="DOBdays" form="adduser">
 			        </select>
+			        <select form="adduser"><option>howdy</option></select>
 			        <input type="submit" id="add" value="Add User">
 			        <input type="submit" id="update" value="Update User">
 			      </fieldset>
@@ -120,7 +124,6 @@ $stmt->close();
 ?>
 				</table>
 				<div>
-					<div>
 <?php 
 	if(!($stmt = $mysqli->prepare("SELECT p.name, p.photo_url, lp.bought, ps.price, m.name, m.country, s.store_name, ps.product_url FROM users u 
 		INNER JOIN list l ON l.fk_user_id = u.user_id
@@ -145,7 +148,7 @@ $stmt->close();
 		echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 	}
 	while($stmt->fetch()){
-	 $productinfo = "<h1>$pname</h1>
+	 $productinfo = "<div class=\"product\"><h1>$pname</h1>
 				<h2>Made by <span>$mname</span></h2>
 				<img src=\"$photourl\" width=\"100\" height=\"100\">
 				<ul>";
@@ -154,7 +157,7 @@ $stmt->close();
 		} else {
 			$productinfo = $productinfo . "<li>Buy at <a href=\"$produrl\">$sname</a> for <span>$price</span></li>";
 		}
-		$productinfo = $productinfo . "</ul>";
+		$productinfo = $productinfo . "</ul></div>";
 		echo $productinfo;
 	}
 

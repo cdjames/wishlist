@@ -146,3 +146,8 @@ input#price_cents{
 	width: 30px;
 }
 
+div.product{
+	border: 1px solid grey;
+	margin: 10px 0px 0px 0px;
+}
+
