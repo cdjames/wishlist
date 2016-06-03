@@ -35,7 +35,7 @@
 	if(!$stmt->execute()){
 		echo "Execute failed: "  . $stmt->errno . " " . $stmt->error;
 	}
-	echo json_encode($stmt->insert_id);
+	echo $stmt->insert_id;
 	$stmt->close();
 
 ?>

@@ -8,8 +8,19 @@ var YEARS = 100,
 	OLDEST_USER = 36,
 	MONTHS = {January: 31, February: 29, March: 31, April: 30, May: 31, June: 30, July: 31, August: 31, September: 30, October: 31, November: 30, December: 31};
 
-var functions = [configForm, handleAddUser];
+var functions = [configForm, handleAddUser, handleListClick];
 doOnLoad(functions);
+
+function handleListClick () {
+	var buttons = document.getElementsByClassName('list_button');
+	for (var i = 0; i < buttons.length; i++) {
+		buttons[i].addEventListener('click', function (event) {
+			event.preventDefault();
+			console.log(event.target);
+			getProductList(event.target.getAttribute('data-id'));
+		});
+	};
+}
 
 function handleAddUser () {
 	var addForm = document.getElementById('adduser');
@@ -23,35 +34,37 @@ function handleAddUser () {
 		request.open("POST", "adduser.php", true);
 		request.addEventListener('load', function () {
 			console.log(request.responseText);
-			getUserList();
+			getUserList(request.responseText);
 		});
 		request.send(formData);
 		// console.log(addForm.elements);
 
 	});
 
-	function getUserList () {
+	function getUserList (listid) {
 		var req = new XMLHttpRequest();
 		req.open("GET", "getuserlist.php?add=true", true);
 		req.addEventListener('load', function () {
 			console.log(req.responseText);
 			var data = JSON.parse(req.responseText);
 			document.getElementById('users').querySelector('tbody').innerHTML = data.list;
-			getProductList(data.listid);
+			getProductList(listid || data.listid);
 		});
 		req.send();
 	}
 
-	function getProductList (listid) {
-		var req = new XMLHttpRequest();
-		req.open("GET", "getprodlist.php?add=true&id=" + listid, true);
-		req.addEventListener('load', function () {
-			console.log(req.responseText);
-			// var data = JSON.parse(req.responseText);
-			document.getElementById('allproducts').innerHTML = req.responseText;
-		});
-		req.send();
-	}
+	
+}
+
+function getProductList (listid) {
+	var req = new XMLHttpRequest();
+	req.open("GET", "getprodlist.php?add=true&listid=" + listid, true);
+	req.addEventListener('load', function () {
+		console.log(req.responseText);
+		// var data = JSON.parse(req.responseText);
+		document.getElementById('allproducts').innerHTML = req.responseText;
+	});
+	req.send();
 }
 
 function configForm () {
