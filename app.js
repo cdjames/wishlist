@@ -23,18 +23,35 @@ function handleAddUser () {
 		request.open("POST", "adduser.php", true);
 		request.addEventListener('load', function () {
 			console.log(request.responseText);
-			var req = new XMLHttpRequest();
-			req.open("GET", "getuserlist.php?add=true", true);
-			req.addEventListener('load', function () {
-				console.log(req.responseText);
-				var data = JSON.parse(req.responseText);
-				document.getElementById('users').querySelector('tbody').innerHTML = data.list;
-			});
-			req.send();
+			getUserList();
 		});
 		request.send(formData);
 		// console.log(addForm.elements);
+
 	});
+
+	function getUserList () {
+		var req = new XMLHttpRequest();
+		req.open("GET", "getuserlist.php?add=true", true);
+		req.addEventListener('load', function () {
+			console.log(req.responseText);
+			var data = JSON.parse(req.responseText);
+			document.getElementById('users').querySelector('tbody').innerHTML = data.list;
+			getProductList(data.listid);
+		});
+		req.send();
+	}
+
+	function getProductList (listid) {
+		var req = new XMLHttpRequest();
+		req.open("GET", "getprodlist.php?add=true&id=" + listid, true);
+		req.addEventListener('load', function () {
+			console.log(req.responseText);
+			// var data = JSON.parse(req.responseText);
+			document.getElementById('allproducts').innerHTML = req.responseText;
+		});
+		req.send();
+	}
 }
 
 function configForm () {

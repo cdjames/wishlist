@@ -29,38 +29,10 @@ if($mysqli->connect_errno){
 				<h1>User</h1>
 				<table id="users">
 					<tbody>
-					<!-- <tr>
-						<th>First name</th>
-						<th>Last name</th>
-						<th>Date of Birth</th>
-						<th>List</th>
-					</tr> -->
 					<!-- dynamically add from database -->
-<?php
-	include 'getuserlist.php';
-// if(!($stmt = $mysqli->prepare("SELECT u.fname, u.lname, u.dob, l.list_id FROM users u INNER JOIN list l ON l.fk_user_id = u.user_id GROUP BY u.lname, u.fname" ))){
-// 	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
-// }
-
-// if(!$stmt->execute()){
-// 	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-// }
-// if(!$stmt->bind_result($fname, $lname, $dob, $listid)){
-// 	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-// }
-// $cnt = 0;
-// $saved_list_id;
-// $saved_fname;
-// while($stmt->fetch()){
-//  if ($cnt == 0) {
-//  	$saved_list_id = $listid;
-//  	$saved_fname = $fname;
-//  }
-//  echo "<tr>\n<td>\n" . $fname . "\n</td>\n<td>\n" . $lname . "\n</td>\n<td>\n" . $dob . "\n</td>\n<td><a href=\"list.php?id=" . $listid . "\">Mylist</a></td>\n</tr>";
-//  $cnt++;
-// }
-// $stmt->close();
-?>
+					<?php
+						include 'getuserlist.php';
+					?>
 					</tbody>
 				</table>
 			</div>
@@ -90,7 +62,7 @@ if($mysqli->connect_errno){
 		</div>
 
 		<div class="outer">
-			<div>
+			<div id="allproducts">
 				<h1>
 					<?php 
 					echo "$saved_fname";
