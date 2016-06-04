@@ -40,14 +40,15 @@ function bindProductEdit(){
 	var buttons = document.getElementsByClassName('prod_update');
 	for (var i = 0; i < buttons.length; i++) {
 		buttons[i].addEventListener('click', function (event) {
+			event.preventDefault();
 			var parent = event.target.parentElement,
 				pid = parent.getAttribute('data-pid'),
 				mid = parent.getAttribute('data-mid'),
 				sid = parent.getAttribute('data-sid'),
 				listid = document.getElementById('lists').getAttribute('data-id');
-			document.getElementById('upd_prod_form_pid').value = pid;
-			document.getElementById('upd_prod_form_mid').value = mid;
-			document.getElementById('upd_prod_form_sid').value = sid;
+			document.getElementById('update_prod_form_pid').value = pid;
+			document.getElementById('update_prod_form_mid').value = mid;
+			document.getElementById('update_prod_form_sid').value = sid;
 			setUpdateProduct(pid, mid, sid, listid);
 		});
 	}
@@ -55,8 +56,49 @@ function bindProductEdit(){
 
 function setUpdateProduct (pid, mid, sid, listid) {
 	// put stuff into update fields!
+	var req = new XMLHttpRequest(),
+		url = "getproductinfo.php?pid=" + pid;
+	req.open("GET", url, true);
+	req.addEventListener('load', function () {
+		var data = JSON.parse(req.responseText);
+		console.log(data);
+		var ids = ["upd_pr_name", "upd_url", "upd_bought", "upd_price", 
+					"upd_price_cents", "upd_mfct", "upd_mfct_cty", "upd_store",
+					"upd_store_url", "upd_prod_url"];
+		setValuesById(ids, data);
+		// handle "bought" radio inputs
+		var radios = document.getElementsByName('upd_bought'),
+			rdioIdx = Math.abs((data.bought - 1)); // change 0 to 1 and 1 to 0
+		radios[rdioIdx].checked = true;
+	});
+	req.send();
 }
 
+function setValuesById (ids, value_obj) {
+	var keys = Object.keys(value_obj);
+	
+	ids.forEach(function (id, idx) {
+		if(id !== "upd_bought")
+			document.getElementById(id).value = value_obj[keys[idx]];
+	}); 
+}
+
+function handleUpdateProduct () {
+	var updProdForm = document.getElementById('updateproduct');
+	updProdForm.addEventListener('submit', function (event) {
+		event.preventDefault();
+		var formData = new FormData(updProdForm);
+		formData.append("listid", document.getElementById('lists').getAttribute('data-id'));
+		var request = new XMLHttpRequest();
+		request.open("POST", "updateproduct.php", true);
+		request.addEventListener('load', function () {
+			console.log(request.responseText);
+			// get the new list of products
+			getProductList(document.getElementById('lists').getAttribute('data-id'));		
+		});
+		request.send(formData);
+	});
+}
 function handleSetBought (pid, listid, status) {
 	var req = new XMLHttpRequest(),
 		url = "setbought.php?pid=" + pid + "&listid=" + listid + "&bought=" + status;
