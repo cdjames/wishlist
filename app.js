@@ -8,8 +8,32 @@ var YEARS = 100,
 	OLDEST_USER = 36,
 	MONTHS = {January: 31, February: 29, March: 31, April: 30, May: 31, June: 30, July: 31, August: 31, September: 30, October: 31, November: 30, December: 31};
 
-var functions = [configForm, handleAddUser, handleListClick, handleAddProduct, bindProductEdit];
+var functions = [configForm, handleAddUser, handleListClick, handleAddProduct, 
+				bindProductEdit, bindProductRemove, bindSetBought];
 doOnLoad(functions);
+
+function bindSetBought () {
+	var buttons = document.getElementsByClassName('got_it');
+	for (var i = 0; i < buttons.length; i++) {
+		buttons[i].addEventListener('click', function (event) {
+			var parent = event.target.parentElement,
+				pid = parent.getAttribute('data-pid'),
+				listid = document.getElementById('lists').getAttribute('data-id'),
+				bought = event.target.getAttribute('data-id');
+			handleSetBought(pid, listid, bought);
+		});
+	}
+}
+function bindProductRemove () {
+	var buttons = document.getElementsByClassName('prod_remove');
+	for (var i = 0; i < buttons.length; i++) {
+		buttons[i].addEventListener('click', function (event) {
+			var parent = event.target.parentElement,
+				pid = parent.getAttribute('data-pid');
+			handleRemoveProduct(pid);
+		});
+	}
+}
 
 function bindProductEdit(){
 	var buttons = document.getElementsByClassName('prod_update');
@@ -22,8 +46,29 @@ function bindProductEdit(){
 			document.getElementById('add_prod_form_pid').value = pid;
 			document.getElementById('add_prod_form_mid').value = mid;
 			document.getElementById('add_prod_form_sid').value = sid;
-		})
-	};
+		});
+	}
+}
+
+function handleSetBought (pid, listid, status) {
+	var req = new XMLHttpRequest(),
+		url = "setbought.php?pid=" + pid + "&listid=" + listid + "&bought=" + status;
+	req.open("GET", url, true);
+	req.addEventListener('load', function () {
+		console.log(req.responseText);
+		getProductList(document.getElementById('lists').getAttribute('data-id'));
+	});
+	req.send();
+}
+
+function handleRemoveProduct (pid) {
+	var req = new XMLHttpRequest();
+	req.open("GET", "removeproduct.php?pid=" + pid, true);
+	req.addEventListener('load', function () {
+		console.log(req.responseText);
+		getProductList(document.getElementById('lists').getAttribute('data-id'));
+	});
+	req.send();
 }
 
 function handleAddProduct () {
@@ -36,7 +81,8 @@ function handleAddProduct () {
 		request.open("POST", "addproduct.php", true);
 		request.addEventListener('load', function () {
 			console.log(request.responseText);
-			// getProductList(document.getElementById('lists').getAttribute('data-id'));		
+			// get the new list of products
+			getProductList(document.getElementById('lists').getAttribute('data-id'));		
 		});
 		request.send(formData);
 	});
@@ -50,7 +96,7 @@ function handleListClick () {
 			console.log(event.target);
 			getProductList(event.target.getAttribute('data-id'));
 		});
-	};
+	}
 }
 
 function handleAddUser () {
@@ -68,7 +114,6 @@ function handleAddUser () {
 			getUserList(request.responseText);
 		});
 		request.send(formData);
-		// console.log(addForm.elements);
 
 	});
 
@@ -91,9 +136,12 @@ function getProductList (listid) {
 	var req = new XMLHttpRequest();
 	req.open("GET", "getprodlist.php?add=true&listid=" + listid, true);
 	req.addEventListener('load', function () {
-		console.log(req.responseText);
+		// console.log(req.responseText);
 		// var data = JSON.parse(req.responseText);
 		document.getElementById('allproducts').innerHTML = req.responseText;
+		bindProductEdit();
+		bindProductRemove();
+		bindSetBought();
 	});
 	req.send();
 }

@@ -88,16 +88,18 @@ if($mysqli->connect_errno){
 				    <input type="hidden" name="sid" id="add_prod_form_sid">
 			        <label for="store">Store Name</label>
 			        <input type="text" name="store" id="store">
+			        <label for="store_url">Store Url</label>
+			        <input type="text" name="store_url" id="store_url">
 			        <label for="prod_url">Product Url</label>
 			        <input type="text" name="prod_url" id="prod_url">
 			        <label for="bought">Bought</label>
 			        <div>
-				        <input type="radio" name="bought" id="bought_yes" value="yes">
-				        <input type="radio" name="bought" id="bought_no" value="no" checked>
+				        <input type="radio" name="bought" id="bought_yes" value="1">
+				        <input type="radio" name="bought" id="bought_no" value="0" checked>
 				    </div>
 			        <!-- <input type="text" name="DOB" id="DOB"> -->
 			        <input type="submit" id="pr_add" value="Add Product">
-			        <input type="submit" id="pr_update" value="Update Product">
+			        <!-- <input type="submit" id="pr_update" value="Update Product"> -->
 			      </fieldset>
 			    </form>
 		    </div>

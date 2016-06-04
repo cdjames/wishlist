@@ -1,8 +1,10 @@
 <?php
-$mysqli = new mysqli("oniddb.cws.oregonstate.edu","jamesc2-db","moS6V4cjzEttrXwo","jamesc2-db");
-if($mysqli->connect_errno){
-	echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
+$mysqli;
+//  = new mysqli("oniddb.cws.oregonstate.edu","jamesc2-db","moS6V4cjzEttrXwo","jamesc2-db");
+// if($mysqli->connect_errno){
+// 	echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
+// }
+include 'mysqli.php'; // get login credentials
 
 // $listid = $_GET['listid'] || $saved_list_id;
 $listid = ($_GET) ? $_GET['listid'] : $saved_list_id;
@@ -72,11 +74,12 @@ $html = "<h1>".
 	if(!$stmt->bind_result($pname, $photourl, $bought, $price, $mname, $country, $sname, $produrl, $product_id, $mfct_id, $store_id)){
 		echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 	}
-	while($stmt->fetch()){
+	// if items in list, for each item fetch and process
+	while($stmt->fetch() && $pname){
 		$productinfo = "<div class=\"product\" data-pid='$product_id' data-mid='$mfct_id' data-sid='$store_id'><h1>$pname</h1>";
 	 	$productinfo .= ($mname) ? "<h2>Made by <span>$mname</span></h2>" : "";
 		// check that url is actually a url
-		$productinfo .=  (strpos($photourl, "http") !== false) ? "<img src=\"$photourl\" width=\"100\" height=\"100\">" : "";
+		$productinfo .=  (strpos($photourl, "http") !== false) ? "<img src=\"$photourl\" height=\"100\">" : "";
 		$productinfo .= "<ul>";
 		if($bought){
 			$productinfo .= "<li>You own this!</li>"; 
@@ -88,15 +91,27 @@ $html = "<h1>".
 			}
 			
 		}
-		$productinfo .= "</ul><button class='prod_update'>Edit Product</button></div>";
+		$productinfo .= "</ul>
+		<button class='prod_update'>Edit Info</button>";
+		if($bought)
+			$productinfo .= "<button class='got_it' data-id=0>I need more!</button>";
+		else
+			$productinfo .= "<button class='got_it' data-id=1>I got it!</button>";
+		$productinfo .= "<button class='prod_remove'>Remove</button>
+		</div>";
+		$html .= $productinfo;
+	}
+	// if no items in list
+	if(!$pname) {
+		$productinfo .= "<h1>No items</h1>";
 		$html .= $productinfo;
 	}
 
 	$stmt->close();
 
-		$html = $html . "</div>";
-		// if ($_GET) {
-		// 	$html = $html . json_encode($_GET);
-		// }
-		echo $html;
+	$html = $html . "</div>";
+	// if ($_GET) {
+	// 	$html = $html . json_encode($_GET);
+	// }
+	echo $html;
 ?>

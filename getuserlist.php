@@ -1,8 +1,6 @@
 <?php 
-	$mysqli = new mysqli("oniddb.cws.oregonstate.edu","jamesc2-db","moS6V4cjzEttrXwo","jamesc2-db");
-	if($mysqli->connect_errno){
-		echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
-	}
+	include 'mysqli.php'; // get login credentials
+	
 	if(!($stmt = $mysqli->prepare("SELECT u.fname, u.lname, u.dob, l.list_id, u.user_id FROM users u INNER JOIN list l ON l.fk_user_id = u.user_id GROUP BY u.lname, u.fname" ))){
 		echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 	}

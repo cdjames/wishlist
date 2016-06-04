@@ -2,9 +2,8 @@
 // keys: fname, lname, years, months, days
 	ini_set('display_errors', 'On');
 	//Connects to the database
-	$mysqli = new mysqli("oniddb.cws.oregonstate.edu","jamesc2-db","moS6V4cjzEttrXwo","jamesc2-db");	if(!$mysqli || $msqli->connect_errno){
-		echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
-		}
+	include 'mysqli.php'; // get login credentials
+	
 	$months = ($_POST['months'] < 10) ? "0" . $_POST['months'] : $_POST['months'];
 	$days = ($_POST['days'] < 10) ? "0" . $_POST['days'] : $_POST['days'];
 	$dob = $_POST['years'] . "-" . $months . "-" . $days;
