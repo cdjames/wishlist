@@ -9,7 +9,7 @@ var YEARS = 100,
 	MONTHS = {January: 31, February: 29, March: 31, April: 30, May: 31, June: 30, July: 31, August: 31, September: 30, October: 31, November: 30, December: 31};
 
 var functions = [configForm, handleAddUser, handleListClick, handleAddProduct, 
-				bindProductEdit, bindProductRemove, bindSetBought];
+				bindProductEdit, bindProductRemove, bindSetBought, handleUpdateProduct];
 doOnLoad(functions);
 
 function bindSetBought () {
@@ -62,14 +62,23 @@ function setUpdateProduct (pid, mid, sid, listid) {
 	req.addEventListener('load', function () {
 		var data = JSON.parse(req.responseText);
 		console.log(data);
-		var ids = ["upd_pr_name", "upd_url", "upd_bought", "upd_price", 
-					"upd_price_cents", "upd_mfct", "upd_mfct_cty", "upd_store",
-					"upd_store_url", "upd_prod_url"];
+		var ids = ["upd_pr_name", "upd_url", "upd_price", 
+					"upd_price_cents", 
+					// "upd_mfct", "upd_mfct_cty", "upd_store",
+					// "upd_store_url",
+					 "upd_prod_url"];
 		setValuesById(ids, data);
 		// handle "bought" radio inputs
 		var radios = document.getElementsByName('upd_bought'),
 			rdioIdx = Math.abs((data.bought - 1)); // change 0 to 1 and 1 to 0
 		radios[rdioIdx].checked = true;
+		// handle select
+		var mfct_select = document.getElementsByName('mfct_select')[1];
+		console.log(mfct_select);
+		mfct_select.value = data.mid;
+		var store_select = document.getElementsByName('store_select')[1];
+		console.log(store_select);
+		store_select.value = data.sid;
 	});
 	req.send();
 }
@@ -78,9 +87,37 @@ function setValuesById (ids, value_obj) {
 	var keys = Object.keys(value_obj);
 	
 	ids.forEach(function (id, idx) {
-		if(id !== "upd_bought")
+		if(id !== "")
 			document.getElementById(id).value = value_obj[keys[idx]];
 	}); 
+}
+
+function getMfctList (elements) {
+	var req = new XMLHttpRequest();
+	req.open("GET", "getmfctlist.php", true);
+	req.addEventListener('load', function () {
+		console.log(req.responseText);
+		// var data = JSON.parse(req.responseText);
+		for (var i = 0; i < elements.length; i++) {
+			elements[i].innerHTML = req.responseText;
+		}
+		// getProductList(listid || data.listid);
+	});
+	req.send();
+}
+
+function getStoreList (elements) {
+	var req = new XMLHttpRequest();
+	req.open("GET", "getstorelist.php", true);
+	req.addEventListener('load', function () {
+		console.log(req.responseText);
+		// var data = JSON.parse(req.responseText);
+		for (var i = 0; i < elements.length; i++) {
+			elements[i].innerHTML = req.responseText;
+		}
+		// getProductList(listid || data.listid);
+	});
+	req.send();
 }
 
 function handleUpdateProduct () {
@@ -92,13 +129,15 @@ function handleUpdateProduct () {
 		var request = new XMLHttpRequest();
 		request.open("POST", "updateproduct.php", true);
 		request.addEventListener('load', function () {
+			// console.log(JSON.parse(request.responseText));
 			console.log(request.responseText);
 			// get the new list of products
-			getProductList(document.getElementById('lists').getAttribute('data-id'));		
+			// getProductList(document.getElementById('lists').getAttribute('data-id'));		
 		});
 		request.send(formData);
 	});
 }
+
 function handleSetBought (pid, listid, status) {
 	var req = new XMLHttpRequest(),
 		url = "setbought.php?pid=" + pid + "&listid=" + listid + "&bought=" + status;
@@ -131,7 +170,9 @@ function handleAddProduct () {
 		request.addEventListener('load', function () {
 			console.log(request.responseText);
 			// get the new list of products
-			getProductList(document.getElementById('lists').getAttribute('data-id'));		
+			getProductList(document.getElementById('lists').getAttribute('data-id'));
+			getMfctList(document.getElementsByClassName('mfct_list'));
+			getStoreList(document.getElementsByClassName('store_list'));
 		});
 		request.send(formData);
 	});

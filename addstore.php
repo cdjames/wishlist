@@ -40,15 +40,9 @@
 			echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 		}
 
-		if($cty){
-			if(!$stmt->bind_param("ss", $store_url, $store_name)){
+		if(!$stmt->bind_param("ss", $store_url, $store_name)){
 				echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 			}
-		} else {
-			if(!$stmt->bind_param("s", $store_id)){
-				echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-			}
-		}
 		
 		if(!$stmt->execute()){
 			echo "store insert execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;

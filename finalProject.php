@@ -76,18 +76,26 @@ if($mysqli->connect_errno){
 			        <label for="url">Photo URL</label>
 			        <input type="text" name="url" id="url">
 			        <input type="hidden" name="mid" id="add_prod_form_mid">
-			        <label for="mfct">Manufacturer</label>
+			        <label for="mfct_select">Manufacturer</label>
+			        <div class="mfct_list">
+				        <?php include 'getmfctlist.php' ?>
+				    </div>
+			        <label for="mfct">New Manufacturer</label>
 			        <input type="text" name="mfct" id="mfct">
-			        <label for="mfct_cty">Manufacturer Country</label>
+			        <label for="mfct_cty">New Manufacturer Country</label>
 			        <input type="text" name="mfct_cty" id="mfct_cty">
 			        <label for="price">Price</label>
 			        <div class="price_outer">
 				        <input type="number" value="10" name="price" id="price" min="0"><span> . </span> 
 				        <input type="number" value="99" name="price_cents" id="price_cents" min="0" max="99"></div>
 				    <input type="hidden" name="sid" id="add_prod_form_sid">
-			        <label for="store">Store Name</label>
+				    <label for="store_select">Store</label>
+				    <div class="store_list">
+				        <?php include 'getstorelist.php' ?>
+				    </div>
+			        <label for="store">New Store Name</label>
 			        <input type="text" name="store" id="store">
-			        <label for="store_url">Store Url</label>
+			        <label for="store_url">New Store Url</label>
 			        <input type="text" name="store_url" id="store_url">
 			        <label for="prod_url">Product Url</label>
 			        <input type="text" name="prod_url" id="prod_url">
@@ -114,22 +122,28 @@ if($mysqli->connect_errno){
 			        <label for="url">Photo URL</label>
 			        <input type="text" name="url" id="upd_url">
 			        <input type="hidden" name="mid" id="update_prod_form_mid">
-			        <label for="mfct">Manufacturer</label>
-			        <input type="text" name="mfct" id="upd_mfct">
+			        <label for="mfct_select">Manufacturer</label>
+			        <div class="mfct_list">
+				        <?php include 'getmfctlist.php' ?>
+				    </div>
+			        <!-- <input type="text" name="mfct" id="upd_mfct">
 			        <label for="mfct_cty">Manufacturer Country</label>
-			        <input type="text" name="mfct_cty" id="upd_mfct_cty">
+			        <input type="text" name="mfct_cty" id="upd_mfct_cty"> -->
 			        <label for="price">Price</label>
 			        <div class="price_outer">
 				        <input type="number" value="10" name="price" id="upd_price" min="0"><span> . </span> 
 				        <input type="number" value="99" name="price_cents" id="upd_price_cents" min="0" max="99"></div>
 				    <input type="hidden" name="sid" id="update_prod_form_sid">
-			        <label for="store">Store Name</label>
-			        <input type="text" name="store" id="upd_store">
+			        <label for="store_select">Store</label>
+			        <div class="store_list">
+				        <?php include 'getstorelist.php' ?>
+				    </div>
+			        <!-- <input type="text" name="store" id="upd_store">
 			        <label for="store_url">Store Url</label>
-			        <input type="text" name="store_url" id="upd_store_url">
+			        <input type="text" name="store_url" id="upd_store_url"> -->
 			        <label for="prod_url">Product Url</label>
 			        <input type="text" name="prod_url" id="upd_prod_url">
-			        <label for="bought">Bought</label>
+			        <label for="upd_bought">Bought</label>
 			        <div>
 				        <input type="radio" name="upd_bought" id="upd_bought_yes" value="1">
 				        <input type="radio" name="upd_bought" id="upd_bought_no" value="0" checked>
