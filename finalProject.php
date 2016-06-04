@@ -26,7 +26,7 @@ if($mysqli->connect_errno){
 		<!-- <script src="script.js"></script> -->
 		<div class="outer">
 			<div>
-				<h1>User</h1>
+				<h1>Users</h1>
 				<table id="users">
 					<tbody>
 					<!-- dynamically add from database -->
@@ -38,7 +38,7 @@ if($mysqli->connect_errno){
 			<div>
 				<form id="adduser" name="adduser" method="post"> <!-- UPDATE THIS -->
 			      <fieldset>
-			        <legend>Add/Update User</legend>
+			        <legend>Add User</legend>
 			        <label for="fname">Name</label>
 			        <input type="text" name="fname" id="fname">
 			        <label for="lname">List Name</label>
@@ -51,9 +51,8 @@ if($mysqli->connect_errno){
 			        </select>
 			        <select id="DOBdays" form="adduser">
 			        </select>
-			        <select form="adduser"><option>howdy</option></select>
 			        <input type="submit" id="add" value="Add User">
-			        <input type="submit" id="update" value="Update User">
+			        <!-- <input type="submit" id="update" value="Update User"> -->
 			      </fieldset>
 			    </form>
 		    </div>
@@ -71,7 +70,7 @@ if($mysqli->connect_errno){
 				<form id="addproduct" method="post"> <!-- UPDATE THIS -->
 			      <fieldset>
 			      	<input type="hidden" name="pid" id="add_prod_form_pid">
-			        <legend>Add/Update Product</legend>
+			        <legend>Add Product</legend>
 			        <label for="name">Name</label>
 			        <input type="text" name="name" id="pr_name">
 			        <label for="url">Photo URL</label>
@@ -82,7 +81,7 @@ if($mysqli->connect_errno){
 			        <label for="mfct_cty">Manufacturer Country</label>
 			        <input type="text" name="mfct_cty" id="mfct_cty">
 			        <label for="price">Price</label>
-			        <div id="price_outer">
+			        <div class="price_outer">
 				        <input type="number" value="10" name="price" id="price" min="0"><span> . </span> 
 				        <input type="number" value="99" name="price_cents" id="price_cents" min="0" max="99"></div>
 				    <input type="hidden" name="sid" id="add_prod_form_sid">
@@ -100,6 +99,44 @@ if($mysqli->connect_errno){
 			        <!-- <input type="text" name="DOB" id="DOB"> -->
 			        <input type="submit" id="pr_add" value="Add Product">
 			        <!-- <input type="submit" id="pr_update" value="Update Product"> -->
+			      </fieldset>
+			    </form>
+		    </div>
+		</div>
+		<div class="outer">
+			<div>
+				<form id="updateproduct" method="post"> <!-- UPDATE THIS -->
+			      <fieldset>
+			      	<input type="hidden" name="pid" id="update_prod_form_pid">
+			        <legend>Update Product</legend>
+			        <label for="name">Name</label>
+			        <input type="text" name="name" id="upd_pr_name">
+			        <label for="url">Photo URL</label>
+			        <input type="text" name="url" id="upd_url">
+			        <input type="hidden" name="mid" id="update_prod_form_mid">
+			        <label for="mfct">Manufacturer</label>
+			        <input type="text" name="mfct" id="upd_mfct">
+			        <label for="mfct_cty">Manufacturer Country</label>
+			        <input type="text" name="mfct_cty" id="upd_mfct_cty">
+			        <label for="price">Price</label>
+			        <div class="price_outer">
+				        <input type="number" value="10" name="price" id="upd_price" min="0"><span> . </span> 
+				        <input type="number" value="99" name="price_cents" id="upd_price_cents" min="0" max="99"></div>
+				    <input type="hidden" name="sid" id="update_prod_form_sid">
+			        <label for="store">Store Name</label>
+			        <input type="text" name="store" id="upd_store">
+			        <label for="store_url">Store Url</label>
+			        <input type="text" name="store_url" id="upd_store_url">
+			        <label for="prod_url">Product Url</label>
+			        <input type="text" name="prod_url" id="upd_prod_url">
+			        <label for="bought">Bought</label>
+			        <div>
+				        <input type="radio" name="bought" id="upd_bought_yes" value="1">
+				        <input type="radio" name="bought" id="upd_bought_no" value="0" checked>
+				    </div>
+			        <!-- <input type="text" name="DOB" id="DOB"> -->
+			        <!-- <input type="submit" id="pr_add" value="Add Product"> -->
+			        <input type="submit" id="pr_update" value="Update Product">
 			      </fieldset>
 			    </form>
 		    </div>

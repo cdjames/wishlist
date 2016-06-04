@@ -14,7 +14,7 @@
 	if(!$product_id) {
 		$product_id = $_POST['pid'];
 	}
-
+	$stmt->close();
 	$action = "SELECT store_id FROM stores WHERE store_name=? and store_url=?";
 		
 	if(!($stmt = $mysqli->prepare($action))){
@@ -30,8 +30,8 @@
 		echo "store select execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 	}
 	$stmt->fetch();
-	echo $store_url;
-	echo $store_name;
+	// echo $store_url;
+	// echo $store_name;
 	if($store_id < 1){ // if there is no such store, create one
 		$stmt->close();
 		$action = "INSERT INTO stores(store_url, store_name) VALUES (?, ?)";

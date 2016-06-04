@@ -29,8 +29,9 @@ function bindProductRemove () {
 	for (var i = 0; i < buttons.length; i++) {
 		buttons[i].addEventListener('click', function (event) {
 			var parent = event.target.parentElement,
-				pid = parent.getAttribute('data-pid');
-			handleRemoveProduct(pid);
+				pid = parent.getAttribute('data-pid'),
+				listid = document.getElementById('lists').getAttribute('data-id');
+			handleRemoveProduct(pid, listid);
 		});
 	}
 }
@@ -42,12 +43,18 @@ function bindProductEdit(){
 			var parent = event.target.parentElement,
 				pid = parent.getAttribute('data-pid'),
 				mid = parent.getAttribute('data-mid'),
-				sid = parent.getAttribute('data-sid');
-			document.getElementById('add_prod_form_pid').value = pid;
-			document.getElementById('add_prod_form_mid').value = mid;
-			document.getElementById('add_prod_form_sid').value = sid;
+				sid = parent.getAttribute('data-sid'),
+				listid = document.getElementById('lists').getAttribute('data-id');
+			document.getElementById('upd_prod_form_pid').value = pid;
+			document.getElementById('upd_prod_form_mid').value = mid;
+			document.getElementById('upd_prod_form_sid').value = sid;
+			setUpdateProduct(pid, mid, sid, listid);
 		});
 	}
+}
+
+function setUpdateProduct (pid, mid, sid, listid) {
+	// put stuff into update fields!
 }
 
 function handleSetBought (pid, listid, status) {
@@ -61,9 +68,9 @@ function handleSetBought (pid, listid, status) {
 	req.send();
 }
 
-function handleRemoveProduct (pid) {
+function handleRemoveProduct (pid, listid) {
 	var req = new XMLHttpRequest();
-	req.open("GET", "removeproduct.php?pid=" + pid, true);
+	req.open("GET", "removeproduct.php?pid=" + pid + "&listid=" + listid, true);
 	req.addEventListener('load', function () {
 		console.log(req.responseText);
 		getProductList(document.getElementById('lists').getAttribute('data-id'));

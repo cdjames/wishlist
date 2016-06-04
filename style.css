@@ -129,20 +129,20 @@ div.outer:nth-child(even){
 	margin: 0px 25px;
 }
 
-div#price_outer {
+div.price_outer {
 	display: flex;
 }
 
-div#price_outer span {
+div.price_outer span {
 	margin: 0px 3px;
 	font-size: 145%;
 }
-input#price{
+input#price, input#upd_price{
 	width: 110px;
 	text-align: right;
 }
 
-input#price_cents{
+input#price_cents, input#upd_price_cents{
 	width: 30px;
 }
 
@@ -151,3 +151,6 @@ div.product{
 	margin: 10px 0px 0px 0px;
 }
 
+div#allproducts{
+	min-width: 300px;
+}

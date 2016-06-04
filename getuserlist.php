@@ -1,6 +1,6 @@
 <?php 
 	include 'mysqli.php'; // get login credentials
-	
+
 	if(!($stmt = $mysqli->prepare("SELECT u.fname, u.lname, u.dob, l.list_id, u.user_id FROM users u INNER JOIN list l ON l.fk_user_id = u.user_id GROUP BY u.lname, u.fname" ))){
 		echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 	}
@@ -37,6 +37,6 @@
 	if ($_GET['add']) {
 		echo json_encode($data);
 	} else {
-		echo $list . $saved_list_id;
+		echo $list;
 	}
 ?>

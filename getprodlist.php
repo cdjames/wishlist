@@ -60,7 +60,7 @@ $html = "<h1>".
 	
 	$html = $html .	"</table><div>";
  
-	if(!($stmt = $mysqli->prepare("SELECT p.name, p.photo_url, lp.bought, ps.price, m.name, m.country, s.store_name, ps.product_url, p.product_id, m.mfct_id, s.store_id FROM users u LEFT JOIN list l ON l.fk_user_id = u.user_id LEFT JOIN list_product lp ON lp.fk_list_id = l.list_id LEFT JOIN product p ON p.product_id = lp.fk_product_id LEFT JOIN product_store ps ON ps.fk_product_id = p.product_id LEFT JOIN stores s ON s.store_id = ps.fk_store_id LEFT JOIN mfct_product mp ON p.product_id = mp.fk_product_id LEFT JOIN manufacturer m ON m.mfct_id = mp.fk_mfct_id WHERE l.list_id = ?" ))){
+	if(!($stmt = $mysqli->prepare("SELECT p.name, p.photo_url, lp.bought, ps.price, m.name, m.country, s.store_name, ps.product_url, p.product_id, m.mfct_id, s.store_id FROM users u LEFT JOIN list l ON l.fk_user_id = u.user_id LEFT JOIN list_product lp ON lp.fk_list_id = l.list_id LEFT JOIN product p ON p.product_id = lp.fk_product_id LEFT JOIN product_store ps ON ps.fk_product_id = p.product_id LEFT JOIN stores s ON s.store_id = ps.fk_store_id LEFT JOIN mfct_product mp ON p.product_id = mp.fk_product_id LEFT JOIN manufacturer m ON m.mfct_id = mp.fk_mfct_id WHERE l.list_id = ? GROUP BY p.name" ))){
 		echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 	}
 
