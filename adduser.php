@@ -1,9 +1,14 @@
 <?php 
-// keys: fname, lname, years, months, days
-	ini_set('display_errors', 'On');
+/*
+** Author: Collin James, CS 340
+** Date: 6/4/16
+** Description: Final Project - adduser.php
+*/
+	/* keys: fname, lname, years, months, days */
+	
 	//Connects to the database
 	include 'mysqli.php'; // get login credentials
-	
+
 	$months = ($_POST['months'] < 10) ? "0" . $_POST['months'] : $_POST['months'];
 	$days = ($_POST['days'] < 10) ? "0" . $_POST['days'] : $_POST['days'];
 	$dob = $_POST['years'] . "-" . $months . "-" . $days;

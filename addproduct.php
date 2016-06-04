@@ -1,4 +1,9 @@
 <?php 
+/*
+** Author: Collin James, CS 340
+** Date: 6/4/16
+** Description: Final Project - addproduct.php
+*/ 
 	// keys: {pid, "name":"","url":"","mfct":"", mfct_cty, "price","price_cents","store":"", store_url, "prod_url":"","bought":"no", listid, mid, sid}
 
 	include 'mysqli.php'; // get login credentials
@@ -8,9 +13,9 @@
 	$product_id = $_POST['pid'];
 	$listid = $_POST['listid'];
 	$url = $_POST['url'];
-	// echo $prod_name;
+	
 
-	// check if product already exists
+	/* check if product already exists */
 	$action = "SELECT product_id FROM product WHERE name=? and photo_url=?";
 		
 	if(!($stmt = $mysqli->prepare($action))){
@@ -26,8 +31,7 @@
 		echo "store select execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 	}
 	$stmt->fetch();
-	// echo $store_url;
-	// echo $store_name;
+	
 	if($pid < 1 && $prod_name){ // if there is no such store, create one
 		$stmt->close();
 		/* add a product */
@@ -49,9 +53,9 @@
 
 	$stmt->close();
 
-	// echo $product_id;
 	$listid = $_POST['listid'];
 
+	/* see if there is already a link to the product on the current list */
 	$action = "SELECT fk_product_id FROM list_product WHERE fk_product_id=? and fk_list_id=?";
 		
 	if(!($stmt = $mysqli->prepare($action))){
@@ -68,7 +72,7 @@
 	}
 	$stmt->fetch();
 
-	/* add a link to the list */
+	/* if no link, add a link to the list */
 	if(!$lid){
 		$stmt->close();
 
@@ -82,7 +86,7 @@
 		if(!$stmt->execute()){
 			echo "list_product execute failed: " . $mysqli->connect_errno . " " . $mysqli->connect_error;
 		}
-		// $stmt->insert_id;
+		
 		$stmt->close();
 	
 		/* add a manufacturer to product */
@@ -95,6 +99,7 @@
 			include 'addstore.php';
 		}
 
+		/* update its purchased status */
 		if($_POST['bought']){
 			include 'setbought.php';
 		}

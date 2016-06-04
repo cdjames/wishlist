@@ -1,5 +1,9 @@
 <?php 
-
+/*
+** Author: Collin James, CS 340
+** Date: 6/4/16
+** Description: Final Project - addstore.php
+*/ 
 	include 'mysqli.php'; // get login credentials
 
 	// select manufacturers with country and name
@@ -14,7 +18,7 @@
 	if(!$product_id) {
 		$product_id = $_POST['pid'];
 	}
-	$stmt->close();
+	
 	$action = "SELECT store_id FROM stores WHERE store_name=? and store_url=?";
 		
 	if(!($stmt = $mysqli->prepare($action))){
@@ -30,8 +34,7 @@
 		echo "store select execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 	}
 	$stmt->fetch();
-	// echo $store_url;
-	// echo $store_name;
+	
 	if($store_id < 1){ // if there is no such store, create one
 		$stmt->close();
 		$action = "INSERT INTO stores(store_url, store_name) VALUES (?, ?)";
@@ -52,6 +55,7 @@
 	}
 	$stmt->close();
 
+	/* see if there is a store linked to the product already */
 	if(!($stmt = $mysqli->prepare("SELECT fk_store_id FROM product_store WHERE fk_product_id=?"))){
 		echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 	}
@@ -65,8 +69,8 @@
 		echo "store_product select execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 	}
 	$stmt->fetch();
-	// make sure that the product doesn't already have a manufacturer
-	// no result or result is not the same s the mfct_id
+
+	/* insert the store if it doesn't exist */
 	if($result < 1 || $result !== $store_id){
 		$stmt->close();
 		$action = "INSERT INTO product_store(fk_product_id, fk_store_id, price, product_url) VALUES(?,?,?,?)";

@@ -1,17 +1,13 @@
 <!--
 	** Author: Collin James, CS 340
-	** Date: 5/4/16
+	** Date: 6/4/16
 	** Description: Final Project - HTML
 -->
 <?php
-//Turn on error reporting
-ini_set('display_errors', 'On');
-//Connects to the database
-$mysqli = new mysqli("oniddb.cws.oregonstate.edu","jamesc2-db","moS6V4cjzEttrXwo","jamesc2-db");
-if($mysqli->connect_errno){
-	echo "Connection error " . $mysqli->connect_errno . " " . $mysqli->connect_error;
-	}
-
+	//Turn on error reporting
+	ini_set('display_errors', 'On');
+	//Connects to the database
+	include 'mysqli.php'; 
 ?>
 
 <!DOCTYPE html>
@@ -40,9 +36,9 @@ if($mysqli->connect_errno){
 			      <fieldset>
 			        <legend>Add User</legend>
 			        <label for="fname">Name</label>
-			        <input type="text" name="fname" id="fname">
+			        <input type="text" name="fname" id="fname" required>
 			        <label for="lname">List Name</label>
-			        <input type="text" name="lname" id="lname">
+			        <input type="text" name="lname" id="lname" required>
 			         <label for="DOByears">Date of birth</label>
 			        <!-- <input type="text" name="DOB" id="DOB"> -->
 			        <select id="DOByears" form="adduser">

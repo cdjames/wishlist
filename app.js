@@ -132,7 +132,7 @@ function handleUpdateProduct () {
 			// console.log(JSON.parse(request.responseText));
 			console.log(request.responseText);
 			// get the new list of products
-			// getProductList(document.getElementById('lists').getAttribute('data-id'));		
+			getProductList(document.getElementById('lists').getAttribute('data-id'));		
 		});
 		request.send(formData);
 	});
