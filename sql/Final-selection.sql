@@ -62,6 +62,7 @@ SELECT fk_product_id FROM list_product WHERE fk_product_id=[product_id] and fk_l
 /* look for a store */
 SELECT store_id FROM stores WHERE store_name=[name] and store_url=[url]
 
+/* select all products on a list less than a certain price */
 SELECT p.name, p.photo_url, lp.bought, ps.price, m.name, m.country, s.store_name, ps.product_url, p.product_id, m.mfct_id, s.store_id FROM users u 
 LEFT JOIN list l ON l.fk_user_id = u.user_id 
 LEFT JOIN list_product lp ON lp.fk_list_id = l.list_id 
