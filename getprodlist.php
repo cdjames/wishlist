@@ -86,7 +86,7 @@
 			$productinfo .=  (strpos($photourl, "http") !== false) ? "<img src=\"$photourl\" height=\"100\">" : "";
 			$productinfo .= "<ul>";
 			if($bought){
-				$productinfo .= "<li>You own this!</li>"; 
+				$productinfo .= "<li>You own this! (It was \$$price)</li>"; 
 			} else {
 				if($sname){
 					$productinfo .= "<li>Buy at ";

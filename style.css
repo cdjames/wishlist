@@ -109,6 +109,19 @@ input[type="submit"] { /* target submit buttons */
 	width: 100%;
 }
 
+input[type="radio"] {
+	width: 14px;
+	display: inline;
+}
+
+div.radios {
+	text-align: center;
+}
+
+div.radios label {
+	display: inline;
+}
+
 p {
 	font-size: 1.5em;
 }

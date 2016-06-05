@@ -105,9 +105,9 @@
 			        <label for="prod_url">Product Url</label>
 			        <input type="text" name="prod_url" id="prod_url">
 			        <label for="bought">Bought</label>
-			        <div>
-				        <input type="radio" name="bought" id="bought_yes" value="1">
-				        <input type="radio" name="bought" id="bought_no" value="0" checked>
+			        <div class="radios">
+				        <label for="bought_yes">Yes</label><input type="radio" name="bought" id="bought_yes" value="1">
+				        <label for="bought_no">No</label><input type="radio" name="bought" id="bought_no" value="0" checked>
 				    </div>
 			        <!-- <input type="text" name="DOB" id="DOB"> -->
 			        <input type="submit" id="pr_add" value="Add Product">
@@ -149,9 +149,9 @@
 			        <label for="prod_url">Product Url</label>
 			        <input type="text" name="prod_url" id="upd_prod_url">
 			        <label for="upd_bought">Bought</label>
-			        <div>
-				        <input type="radio" name="upd_bought" id="upd_bought_yes" value="1">
-				        <input type="radio" name="upd_bought" id="upd_bought_no" value="0" checked>
+			        <div class="radios">
+				        <label for="upd_bought_yes">Yes</label><input type="radio" name="upd_bought" id="upd_bought_yes" value="1">
+				        <label for="upd_bought_no">No</label><input type="radio" name="upd_bought" id="upd_bought_no" value="0" checked>
 				    </div>
 			        <!-- <input type="text" name="DOB" id="DOB"> -->
 			        <!-- <input type="submit" id="pr_add" value="Add Product"> -->
