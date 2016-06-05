@@ -16,8 +16,8 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
-		<link rel="stylesheet" href="style.css">
-		<script src="app.js"></script>
+		<link rel="stylesheet" href="public/style.css">
+		<script src="public/app.js"></script>
 	</head>
 	<body>
 		<!-- <script src="script.js"></script> -->
