@@ -22,24 +22,28 @@
 		echo "Bind failed: "  . $stmt->errno . " " . $stmt->error;
 	}
 	if(!$stmt->execute()){
-		echo "Execute failed: "  . $stmt->errno . " " . $stmt->error;
+		$error = "Execute failed: "  . $stmt->errno . " " . $stmt->error;
+		$status = "fail";
+		echo $status;
 	} else {
 		$userid = $stmt->insert_id;
 	}
 
 	/* create list for user */
-	if(!($stmt = $mysqli->prepare("INSERT INTO list(updated, fk_user_id) VALUES (CURRENT_TIMESTAMP, ?)"))){
-		echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
-	}
+	if($userid){
+		if(!($stmt = $mysqli->prepare("INSERT INTO list(updated, fk_user_id) VALUES (CURRENT_TIMESTAMP, ?)"))){
+			echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
+		}
 
-	if(!($stmt->bind_param("i", $userid))){
-		echo "Bind failed: "  . $stmt->errno . " " . $stmt->error;
-	}
+		if(!($stmt->bind_param("i", $userid))){
+			echo "Bind failed: "  . $stmt->errno . " " . $stmt->error;
+		}
 
-	if(!$stmt->execute()){
-		echo "Execute failed: "  . $stmt->errno . " " . $stmt->error;
+		if(!$stmt->execute()){
+			echo "Execute failed: "  . $stmt->errno . " " . $stmt->error;
+		}
+		echo $stmt->insert_id;
 	}
-	echo $stmt->insert_id;
 	$stmt->close();
 
 ?>

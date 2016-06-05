@@ -16,12 +16,12 @@
 	
 
 	/* check if product already exists */
-	$action = "SELECT product_id FROM product WHERE name=? and photo_url=?";
+	$action = "SELECT product_id FROM product WHERE name=?";
 		
 	if(!($stmt = $mysqli->prepare($action))){
 		echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
 	}
-	if(!$stmt->bind_param("ss", $prod_name, $url)){
+	if(!$stmt->bind_param("s", $prod_name)){
 		echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
 	}
 	if(!$stmt->bind_result($pid)){
@@ -32,14 +32,14 @@
 	}
 	$stmt->fetch();
 	
-	if($pid < 1 && $prod_name){ // if there is no such store, create one
+	if($pid < 1 && $prod_name){ // if there is no such product, create one
 		$stmt->close();
 		/* add a product */
 		if(!($stmt = $mysqli->prepare("INSERT INTO product(name, photo_url) VALUES (?, ?)" ))){
-			echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
+			echo "Prepare failed: " . $stmt->errno . " " . $stmt->error;
 		}
 		if(!$stmt->bind_param("ss", $prod_name, $_POST['url'])){
-			echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
+			echo "Bind failed: " . $mysqli->connect_errno . " " . $mysqli->connect_error;
 		}
 
 		if(!$stmt->execute()){
@@ -73,7 +73,7 @@
 	$stmt->fetch();
 
 	/* if no link, add a link to the list */
-	if(!$lid){
+	if(!$lid && $product_id){
 		$stmt->close();
 
 		if(!($stmt = $mysqli->prepare("INSERT INTO list_product(fk_product_id, fk_list_id) VALUES(?,?)" ))){

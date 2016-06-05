@@ -9,7 +9,8 @@ var YEARS = 100,
 	MONTHS = {January: 31, February: 29, March: 31, April: 30, May: 31, June: 30, July: 31, August: 31, September: 30, October: 31, November: 30, December: 31};
 
 var functions = [configForm, handleAddUser, handleListClick, handleAddProduct, 
-				bindProductEdit, bindProductRemove, bindSetBought, handleUpdateProduct];
+				bindProductEdit, bindProductRemove, bindSetBought, handleUpdateProduct,
+				handleSearch];
 doOnLoad(functions);
 
 function bindSetBought () {
@@ -57,7 +58,7 @@ function bindProductEdit(){
 function setUpdateProduct (pid, mid, sid, listid) {
 	// put stuff into update fields!
 	var req = new XMLHttpRequest(),
-		url = "getproductinfo.php?pid=" + pid;
+		url = "getproductinfo.php?pid=" + pid + "&listid=" + listid;
 	req.open("GET", url, true);
 	req.addEventListener('load', function () {
 		var data = JSON.parse(req.responseText);
@@ -71,13 +72,15 @@ function setUpdateProduct (pid, mid, sid, listid) {
 		// handle "bought" radio inputs
 		var radios = document.getElementsByName('upd_bought'),
 			rdioIdx = Math.abs((data.bought - 1)); // change 0 to 1 and 1 to 0
+		console.log(data.bought);
+		console.log(rdioIdx);
 		radios[rdioIdx].checked = true;
 		// handle select
 		var mfct_select = document.getElementsByName('mfct_select')[1];
-		console.log(mfct_select);
+		// console.log(mfct_select);
 		mfct_select.value = data.mid;
 		var store_select = document.getElementsByName('store_select')[1];
-		console.log(store_select);
+		// console.log(store_select);
 		store_select.value = data.sid;
 	});
 	req.send();
@@ -118,6 +121,27 @@ function getStoreList (elements) {
 		// getProductList(listid || data.listid);
 	});
 	req.send();
+}
+
+function handleSearch () {
+	var searchForm = document.getElementById('search');
+	searchForm.addEventListener('submit', function (event) {
+		event.preventDefault();
+		var formData = new FormData(searchForm);
+		formData.append("listid", document.getElementById('lists').getAttribute('data-id'));
+		var request = new XMLHttpRequest();
+		request.open("POST", "searchproducts.php", true);
+		request.addEventListener('load', function () {
+			// console.log(JSON.parse(request.responseText));
+			console.log(request.responseText);
+			// get the new list of products
+			document.getElementById('allproducts').innerHTML = request.responseText;
+			bindProductEdit();
+			bindProductRemove();
+			bindSetBought();		
+		});
+		request.send(formData);
+	});
 }
 
 function handleUpdateProduct () {
@@ -194,9 +218,6 @@ function handleAddUser () {
 	addForm.addEventListener('submit', function (event) {
 		event.preventDefault();
 		var formData = new FormData(addForm);
-		formData.append("years", document.getElementById('DOByears').value);
-		formData.append("months", document.getElementById('DOBmonths').value);
-		formData.append("days", document.getElementById('DOBdays').value);
 		var request = new XMLHttpRequest();
 		request.open("POST", "adduser.php", true);
 		request.addEventListener('load', function () {
@@ -214,7 +235,8 @@ function handleAddUser () {
 			console.log(req.responseText);
 			var data = JSON.parse(req.responseText);
 			document.getElementById('users').querySelector('tbody').innerHTML = data.list;
-			getProductList(listid || data.listid);
+			handleListClick(); // add listeners to list buttons
+			getProductList(listid || data.listid || 'fail');
 		});
 		req.send();
 	}
@@ -224,9 +246,10 @@ function handleAddUser () {
 
 function getProductList (listid) {
 	var req = new XMLHttpRequest();
+	console.log("listid = " + listid);
 	req.open("GET", "getprodlist.php?add=true&listid=" + listid, true);
 	req.addEventListener('load', function () {
-		// console.log(req.responseText);
+		console.log(req.responseText);
 		// var data = JSON.parse(req.responseText);
 		document.getElementById('allproducts').innerHTML = req.responseText;
 		bindProductEdit();

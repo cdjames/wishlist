@@ -6,6 +6,7 @@
 <?php
 	//Turn on error reporting
 	ini_set('display_errors', 'On');
+	
 	//Connects to the database
 	include 'mysqli.php'; 
 ?>
@@ -41,15 +42,23 @@
 			        <input type="text" name="lname" id="lname" required>
 			         <label for="DOByears">Date of birth</label>
 			        <!-- <input type="text" name="DOB" id="DOB"> -->
-			        <select id="DOByears" form="adduser">
+			        <select id="DOByears" name="years" form="adduser">
 			        </select>
-			        <select id="DOBmonths" form="adduser">
+			        <select id="DOBmonths" name="months" form="adduser">
 			        </select>
-			        <select id="DOBdays" form="adduser">
+			        <select id="DOBdays" name="days" form="adduser">
 			        </select>
 			        <input type="submit" id="add" value="Add User">
 			        <!-- <input type="submit" id="update" value="Update User"> -->
 			      </fieldset>
+			    </form>
+		    </div>
+
+		    <div id="search_outer">
+		    	<form id="search">
+			    	<label for="search_field">Find products under price:</label>
+			    	<input id="search_field" name="price" type="number" value="15">
+			    	<input type="submit" value="Search">
 			    </form>
 		    </div>
 		</div>
@@ -68,12 +77,12 @@
 			      	<input type="hidden" name="pid" id="add_prod_form_pid">
 			        <legend>Add Product</legend>
 			        <label for="name">Name</label>
-			        <input type="text" name="name" id="pr_name">
+			        <input type="text" name="name" id="pr_name" required>
 			        <label for="url">Photo URL</label>
 			        <input type="text" name="url" id="url">
 			        <input type="hidden" name="mid" id="add_prod_form_mid">
-			        <label for="mfct_select">Manufacturer</label>
-			        <div class="mfct_list">
+			        <label for="mfct_select" style='display: none;'>Manufacturer</label>
+			        <div class="mfct_list" style='display: none;'>
 				        <?php include 'getmfctlist.php' ?>
 				    </div>
 			        <label for="mfct">New Manufacturer</label>
@@ -85,8 +94,8 @@
 				        <input type="number" value="10" name="price" id="price" min="0"><span> . </span> 
 				        <input type="number" value="99" name="price_cents" id="price_cents" min="0" max="99"></div>
 				    <input type="hidden" name="sid" id="add_prod_form_sid">
-				    <label for="store_select">Store</label>
-				    <div class="store_list">
+				    <label for="store_select" style='display: none;'>Store</label>
+				    <div class="store_list" style='display: none;'>
 				        <?php include 'getstorelist.php' ?>
 				    </div>
 			        <label for="store">New Store Name</label>
@@ -114,7 +123,7 @@
 			      	<input type="hidden" name="pid" id="update_prod_form_pid">
 			        <legend>Update Product</legend>
 			        <label for="name">Name</label>
-			        <input type="text" name="name" id="upd_pr_name">
+			        <input type="text" name="name" id="upd_pr_name" required>
 			        <label for="url">Photo URL</label>
 			        <input type="text" name="url" id="upd_url">
 			        <input type="hidden" name="mid" id="update_prod_form_mid">

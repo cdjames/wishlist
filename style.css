@@ -125,6 +125,10 @@ div.outer {
 	float: left;
 }
 
+div.outer>div {
+	margin-bottom: 20px;
+}
+
 div.outer:nth-child(even){
 	margin: 0px 25px;
 }
@@ -153,4 +157,17 @@ div.product{
 
 div#allproducts{
 	min-width: 300px;
+}
+
+form#search input {
+	display: inline;
+}
+
+form#search input[type="submit"]{
+	width: 30%;
+}
+
+input#search_field {
+	width: 58%;
+	text-align: right;
 }
